@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profils étudiants</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <header>
+    <div class="header">
+      <div class="logo-container">
+      <img src="assets/0a33a996-d6f7-4e8d-99cd-61a08de9dc94.jpg" alt="Logo ChouAide" class="logo">
+      <span class="site-title">ChouAide</span>
+    </div>
+    <nav>
+      <ul class="nav-links" id="nav-Links">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="trouver.html">Trouver des services</a></li>
+        <li><a href="proposer.html">Proposer des services</a></li>
+        <li><a href="profils.html">Profils</a></li>
+        <li><a href="Apropos.html">À propos</a></li>
+      </ul>
+    </nav>
+    </div>
+    <p class="slogan">Découvre les profils d'étudiants qui proposent leurs services !</p>
+    
+    
+  </header>
+
+   <h3 id="titreCategorie"> Profils étudiants disponible toutes catégories confondues</h3>
+
+  <main id="profilContainer" class="grid-container">
+    <!-- Les profils seront injectés ici par JavaScript -->
+  </main>
+ 
+
+  <footer>
+    <p>© 2025 Prestations Étudiantes. Tous droits réservés.</p>
+  </footer>
+
+  <script>
+const profils = {
+  cours: [
+    { nom: "Harmonie D.", competence: "Mathématiques, Physique", dispo: "Mercredi, après-midi", niveau: "L2", email: "harmonie.d@email.com" },
+    { nom: "Louis K.", competence: "Anglais, EOE", dispo: "Week-end", niveau: "L1", email: "louis.k@email.com" }
+  ],
+  depannage: [
+    { nom: "Marc T.", competence: "Nettoyage logiciel, Réinstallation Windows", dispo: "Tous les jours", niveau: "L4", email: "marc.t@email.com" },
+    { nom: "Sarah B.", competence: "Mac et PC, sécurité", dispo: "Lundi au jeudi", niveau: "L2", email: "sarah.b@email.com" }
+  ],
+  design: [
+    { nom: "Clara G.", competence: "Logos, Affiches", dispo: "Flexible", niveau: "L4", email: "clara.g@email.com" },
+    { nom: "Kevin A.", competence: "UX/UI, CV Design", dispo: "Week-end", niveau: "L3", email: "kevin.a@email.com" }
+  ],
+  traduction: [
+    { nom: "Elie Z.", competence: "Anglais → Français, Relecture académique", dispo: "Tous les Mercredi", niveau: "L3", email: "elie.z@email.com" },
+    { nom: "Nadine P.", competence: "CV & lettres de motivation", dispo: "mardi et jeudi", niveau: "L2", email: "nadine.p@email.com" }
+  ]
+};
+
+const titresCatégories = {
+  cours: "📘 Cours particuliers",
+  depannage: "🛠️ Dépannage informatique",
+  design: "🎨 Design graphique",
+  traduction: "💬 Traduction & relecture"
+};
+
+const params = new URLSearchParams(window.location.search);
+const categorie = params.get("categorie");
+
+const container = document.getElementById("profilContainer");
+const titre = document.getElementById("titreCategorie");
+
+let profilsCategorie = [];
+
+if (categorie) {
+  // Si une catégorie est précisée, on affiche celle-là
+  profilsCategorie = [...(profils[categorie] || [])];
+  const profilsAjoutes = JSON.parse(localStorage.getItem(categorie)) || [];
+  profilsCategorie = profilsCategorie.concat(profilsAjoutes);
+  titre.textContent = titresCatégories[categorie] || "Profils étudiants";
+} else {
+  // Sinon, afficher TOUS les profils de TOUTES les catégories
+  for (let cat in profils) {
+    profilsCategorie = profilsCategorie.concat(profils[cat]);
+  }
+
+  // Ajouter ceux du localStorage
+  const allKeys = ["cours", "depannage", "design", "traduction"];
+  allKeys.forEach(key => {
+    const enregistre = JSON.parse(localStorage.getItem(key)) || [];
+    profilsCategorie = profilsCategorie.concat(enregistre);
+  });
+
+  titre.textContent = " Tous les profils étudiants disponible toutes catégories confondues";
+}
+
+// Affichage
+if (profilsCategorie.length > 0) {
+  profilsCategorie.forEach(profil => {
+    const card = document.createElement("div");
+    card.className = "service-card";
+    card.innerHTML = `
+      <h2>${profil.nom}</h2>
+      <p><strong>Compétences :</strong> ${profil.competence}</p>
+      <p><strong>Disponibilité :</strong> ${profil.dispo}</p>
+      <p><strong>Niveau :</strong> ${profil.niveau || 'Non précisé'}</p>
+      <div class="btn-container">
+        <a href="mailto:${profil.email}" class="btn">Contacter</a>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+} else {
+  container.innerHTML = "<p style='text-align:center;'>Désolé, aucun profil n'est encore disponible.</p>";
+}
+
+// Définir un "admin" simulé (dans une vraie version ce serait via un login sécurisé)
+const estAdmin = localStorage.getItem("admin") === "true";
+
+if (estAdmin) {
+  const navLinks = document.getElementById("navLinks");
+  const adminLink = document.createElement("li");
+  adminLink.innerHTML = `<a href="admin.html">Admin 🔒</a>`;
+  navLinks.appendChild(adminLink);
+}
+
+// (notification affichée)
+  if (estAdmin) {
+  const enAttente = JSON.parse(localStorage.getItem("candidaturesEnAttente")) || [];
+  const badge = enAttente.length > 0 ? ` <span class="notif-badge">${enAttente.length}</span>` : "";
+  const adminLink = document.createElement("li");
+  adminLink.innerHTML = `<a href="admin.html">Admin 🔒${badge}</a>`;
+  navLinks.appendChild(adminLink);
+}
+</script>
+</body>
+</html>

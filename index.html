@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChouAide</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <div class="header">
+      <div class="logo-container">
+      <img src="assets/0a33a996-d6f7-4e8d-99cd-61a08de9dc94.jpg" alt="Logo ChouAide" class="logo">
+      <span class="site-title">ChouAide</span>
+    </div>
+    <nav>
+      <ul class="nav-links" id="nav-Links">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="trouver.html">Trouver des services</a></li>
+        <li><a href="proposer.html">Proposer des services</a></li>
+        <li><a href="profils.html">Profils</a></li>
+        <li><a href="Apropos.html">À propos</a></li>
+      </ul>
+    </nav>
+    </div>
+    <p class="slogan">La plateforme où les étudiants trouvent et proposent des services !</p>
+  </header>
+  
+
+  <section class="carousel">
+    <div class="slide active">
+      <img src="assets/file_0000000020346230a90444d625b8ac8f.png" alt="Trouver ou proposer une prestation">
+    </div>
+    <div class="slide">
+      <img src="assets/file_000000007bf461fb95d63369acd726c5 (1).png" alt="Cours et révisions">
+    </div>
+    <div class="slide">
+      <img src="assets/file_00000000669061f8a0131c0b12306275.png" alt="Création et projets visuels">
+    </div>
+    <div class="slide">
+      <img src="assets/file_00000000b62061f7adf2a0103635b6a6.png" alt="Autres prestations étudiantes">
+    </div>
+  </section>
+
+  <main class="grid-container">
+    <section class="cta">
+      <button class="btn" onclick="window.location.href='trouver.html'">Trouver une prestation</button>
+      <button class="btn" onclick="window.location.href='proposer.html'">Proposer une prestation</button>
+    </section>
+
+    <section class="features">
+      <div class="card" onclick="window.location.href='profils.html?categorie=cours'">
+        <h2>📚 Cours particuliers</h2>
+        <p>Aide en maths, physique, langues, et plus !</p>
+      </div>
+      <div class="card" onclick="window.location.href='profils.html?categorie=depannage'">
+        <h2>💻 Services tech</h2>
+        <p>Sites web, dépannage informatique, et tutoriels.</p>
+      </div>
+      <div class="card" onclick="window.location.href='profils.html?categorie=design'">
+        <h2>🎨 Design & Création</h2>
+        <p>Logos, affiches, portfolios étudiants et plus.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 ChouAide. Tous droits réservés.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

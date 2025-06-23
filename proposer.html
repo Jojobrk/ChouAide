@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    (function(){
+      emailjs.init("zu7wreF2cdUHqhcxS"); // Ma cle public
+    })();
+</script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Proposer une prestation</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+   <div class="header"> 
+     <div class="logo-container">
+      <img src="assets/0a33a996-d6f7-4e8d-99cd-61a08de9dc94.jpg" alt="Logo ChouAide" class="logo">
+      <span class="site-title">ChouAide</span>
+    </div>
+    <nav>
+      <ul class="nav-links" id="nav-Links">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="trouver.html">Trouver des services</a></li>
+        <li><a href="proposer.html">Proposer des services</a></li>
+        <li><a href="profils.html">Profils</a></li>
+        <li><a href="Apropos.html">À propos</a></li>
+      </ul>
+    </nav>
+   </div>
+    <p class="slogan">Remplis ce formulaire pour proposer ton aide à d'autres étudiants.</p>
+  </header>
+
+  <h1>📢 Proposer une prestation</h1>
+
+  <main style="max-width: 600px; margin: 0 auto; padding: 2rem;">
+    <form id="propositionForm">
+      <label>Nom :
+        <input type="text" name="nom" required />
+      </label><br/><br/>
+
+      <label>Compétences :
+        <input type="text" name="competence" required />
+      </label><br/><br/>
+
+      <label>Disponibilité :
+        <input type="text" name="dispo" required />
+      </label><br/><br/>
+
+      <label>Niveau :
+        <input type="text" name="niveau" required />
+      </label><br/><br/>
+
+      <label>Email :
+        <input type="email" name="email" required />
+      </label><br/><br/>
+
+      <label>Catégorie :
+        <select name="categorie" required>
+          <option value="">-- Choisis une catégorie --</option>
+          <option value="cours">Cours particuliers</option>
+          <option value="depannage">Dépannage informatique</option>
+          <option value="design">Design graphique</option>
+          <option value="traduction">Traduction & relecture</option>
+        </select>
+      </label><br/><br/>
+
+      <button type="submit" class="btn">Envoyer</button>
+    </form>
+  </main>
+
+  <footer>
+    <p>© 2025 ChouAide. Tous droits réservés.</p>
+  </footer>
+
+<script>
+  document.getElementById("propositionForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const form = this;
+    const data = Object.fromEntries(new FormData(form).entries());
+
+    // ✅ Envoie l'email via EmailJS
+    emailjs.send("service_3ptka06", "template_t9hzjba", {
+      nom: data.nom,
+      competence: data.competence,
+      dispo: data.dispo,
+      niveau: data.niveau,
+      email: data.email,
+      categorie: data.categorie
+    }).then(function(response) {
+      alert("Merci ! Ta candidature a été envoyée à l’équipe.");
+      form.reset();
+      window.location.href = "merci.html"; // redirection après envoi
+    }, function(error) {
+      alert("Erreur lors de l'envoi. Réessaie plus tard.");
+      console.log(error);
+    });
+
+    // Optionnel : sauvegarder localement pour debug
+    /*
+    let existants = JSON.parse(localStorage.getItem(data.categorie)) || [];
+    existants.push(data);
+    localStorage.setItem(data.categorie, JSON.stringify(existants));
+    */
+  });
+
+
+
+  // Définir un "admin" simulé (dans une vraie version ce serait via un login sécurisé)
+const estAdmin = localStorage.getItem("admin") === "true";
+
+if (estAdmin) {
+  const navLinks = document.getElementById("navLinks");
+  const adminLink = document.createElement("li");
+  adminLink.innerHTML = `<a href="admin.html">Admin 🔒</a>`;
+  navLinks.appendChild(adminLink);
+}
+</script>
+</body>
+</html>

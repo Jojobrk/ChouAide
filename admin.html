@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin ChouAide</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>👩‍💼 Candidatures en attente</h1>
+  <div id="adminZone"></div>
+
+  <script>
+    // 🔐 Protection simple
+    if (localStorage.getItem("admin") !== "true") {
+      alert("Accès réservé aux administrateurs.");
+      window.location.href = "index.html";
+    }
+
+    // 🔍 Charger candidatures en attente
+    const adminZone = document.getElementById("adminZone");
+    const enAttente = JSON.parse(localStorage.getItem("profilsEnAttente")) || [];
+
+    if (enAttente.length === 0) {
+      adminZone.innerHTML = "<p>Aucune candidature en attente.</p>";
+    } else {
+      enAttente.forEach((profil, i) => {
+        const div = document.createElement("div");
+        div.innerHTML = `
+          <h3>${profil.nom}</h3>
+          <p><strong>Catégorie :</strong> ${profil.categorie}</p>
+          <p><strong>Compétences :</strong> ${profil.competence}</p>
+          <p><strong>Email :</strong> ${profil.email}</p>
+          <button onclick="valider(${i})">✅ Accepter</button>
+          <button onclick="refuser(${i})">❌ Refuser</button>
+          <hr/>
+        `;
+        adminZone.appendChild(div);
+      });
+    }
+
+    function valider(index) {
+      const enAttente = JSON.parse(localStorage.getItem("profilsEnAttente")) || [];
+      const valides = JSON.parse(localStorage.getItem("profilsAjoutes")) || [];
+
+      valides.push(enAttente[index]);
+      enAttente.splice(index, 1);
+
+      localStorage.setItem("profilsEnAttente", JSON.stringify(enAttente));
+      localStorage.setItem("profilsAjoutes", JSON.stringify(valides));
+
+      alert("Candidature acceptée !");
+      location.reload();
+    }
+
+    function refuser(index) {
+      const enAttente = JSON.parse(localStorage.getItem("profilsEnAttente")) || [];
+      enAttente.splice(index, 1);
+      localStorage.setItem("profilsEnAttente", JSON.stringify(enAttente));
+
+      alert("Candidature refusée.");
+      location.reload();
+    }
+  </script>
+</body>
+</html>
