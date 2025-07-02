@@ -45,14 +45,14 @@ Il doit afficher les erreurs si elles existent (par exemple, mauvais identifiant
           <% }); %>
         </ul>
       <% } %>
-      <form action="/auth/login" method="POST" id="loginForm">
+      <form action="/login" method="POST" id="loginForm">
         <label for="email">Adresse email</label>
         <input type="email" id="email" name="email" required />
 
-        <label for="password">Mot de passe</label>
+        <label for="password" class="inscrit" >Mot de passe</label>
         <input type="password" id="password" name="password" required />
 
-        <div class="checkbox">
+        <div class="checkbox ">
           <input type="checkbox" id="remember" name="remember" />
           <label for="remember">Se souvenir de moi</label>
         </div>

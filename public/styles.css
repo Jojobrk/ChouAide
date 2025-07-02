@@ -460,3 +460,9 @@ body.dark-mode .grid-container .service-card:focus {
   border-color: var(--clr-primary-light);
 }
 
+ .inscrit  input{
+  padding: 10px;
+  border-radius: 10px;
+  border-color: var(--clr-primary-light);
+}
+

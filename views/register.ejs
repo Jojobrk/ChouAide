@@ -35,22 +35,19 @@ Créer un formulaire d’inscription qui envoie les champs username, email et pa
   </header>
     <main style="max-width: 600px; margin: 0 auto; padding: 2rem;">
         <h1>📝 Inscription</h1>
-        <form action="/auth/register" method="POST" id="registerForm">
-        <label>Nom d'utilisateur :
-            <input type="text" name="username" required />
-        </label><br/><br/>
-    
-        <label>Email :
-            <input type="email" name="email" required />
-        </label><br/><br/>
-    
-        <label class="inscit">Mot de passe :
-            <input   type="password" name="password" required />
-        </label><br/><br/>
-    
-        <button type="submit">S'inscrire</button>
-        </form>
-        <p>Déjà inscrit ? <a href="/login">Connecte-toi ici</a></p>
+        <form action="/register" method="POST" id="registerForm">
+      <label>Nom d'utilisateur :
+        <input type="text" name="username" required />
+      </label><br/><br/>
+      <label>Email :
+        <input type="email" name="email" required />
+      </label><br/><br/>
+      <label class="inscit">Mot de passe :
+        <input type="password" name="password" required />
+      </label><br/><br/>
+      <button type="submit">S'inscrire</button>
+    </form>
+    <p>Déjà inscrit ? <a href="/login">Connecte-toi ici</a></p>
     </main>
     <footer>
         <p>© 2025 ChouAide. Tous droits réservés.</p>
@@ -58,27 +55,3 @@ Créer un formulaire d’inscription qui envoie les champs username, email et pa
     <script src="script.js"></script>
 </body>
 </html>
-<script>
-document.getElementById('registerForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Empêche l'envoi du formulaire par défaut
-    const formData = new FormData(this);
-    fetch('/auth/register', {
-        method: 'POST',
-        body: formData,
-    })
-    .then(response => {
-        if (response.ok) {
-            alert('Inscription réussie !');
-            window.location.href = '/auth/login'; // Redirige vers la page de connexion
-        } else {
-            return response.text().then(text => {
-                alert('Erreur lors de l\'inscription : ' + text);
-            });
-        }
-    })
-    .catch(error => {
-        console.error('Erreur réseau :', error);
-        alert('Erreur lors de l\'inscription. Veuillez réessayer plus tard.');
-    });
-});
-</script>
