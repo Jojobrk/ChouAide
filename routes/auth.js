@@ -1,6 +1,5 @@
 // Gère l’inscription (/auth/register) et la connexion (/auth/login) des utilisateurs.
 
-
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
@@ -95,3 +94,5 @@ const ensureAuthenticated = (req, res, next) => {
   }
   res.redirect('/auth/login'); // Rediriger vers la page de connexion si non authentifié
 }
+
+// Route pour accéder à une page protégée (exemple)

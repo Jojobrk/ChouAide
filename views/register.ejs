@@ -1,0 +1,84 @@
+<!-- Dans le fichier register.ejs (ou register), tu dois :
+Créer un formulaire d’inscription qui envoie les champs username, email et password en POST vers /auth/register. -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <title>Inscription</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <div class="header">
+      <div class="logo-container">
+        <img src="assets/0a33a996-d6f7-4e8d-99cd-61a08de9dc94.jpg" alt="Logo ChouAide" class="logo">
+        <span class="site-title">ChouAide</span>
+      </div>
+      <div class="nav-center-page">
+        <nav>
+          <ul class="nav-links" id="nav-Links">
+            <li><a href="/">Accueil</a></li>
+            <li><a href="/trouver">Trouver des services</a></li>
+            <li><a href="/proposer">Proposer des services</a></li>
+            <li><a href="/profils">Profils</a></li>
+            <li><a href="/about">À propos</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="icone">
+        <i class="fa-solid fa-circle-user"><a href="/login"></a></i>
+      </div>
+    </div>
+    <p class="slogan">Inscris-toi pour proposer ou trouver des services étudiants !</p>
+  </header>
+    <main style="max-width: 600px; margin: 0 auto; padding: 2rem;">
+        <h1>📝 Inscription</h1>
+        <form action="/auth/register" method="POST" id="registerForm">
+        <label>Nom d'utilisateur :
+            <input type="text" name="username" required />
+        </label><br/><br/>
+    
+        <label>Email :
+            <input type="email" name="email" required />
+        </label><br/><br/>
+    
+        <label class="inscit">Mot de passe :
+            <input   type="password" name="password" required />
+        </label><br/><br/>
+    
+        <button type="submit">S'inscrire</button>
+        </form>
+        <p>Déjà inscrit ? <a href="/login">Connecte-toi ici</a></p>
+    </main>
+    <footer>
+        <p>© 2025 ChouAide. Tous droits réservés.</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
+<script>
+document.getElementById('registerForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Empêche l'envoi du formulaire par défaut
+    const formData = new FormData(this);
+    fetch('/auth/register', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Inscription réussie !');
+            window.location.href = '/auth/login'; // Redirige vers la page de connexion
+        } else {
+            return response.text().then(text => {
+                alert('Erreur lors de l\'inscription : ' + text);
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Erreur réseau :', error);
+        alert('Erreur lors de l\'inscription. Veuillez réessayer plus tard.');
+    });
+});
+</script>

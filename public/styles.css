@@ -108,6 +108,12 @@ nav ul li a:focus {
   outline: none;
 }
 
+i{
+  font-size: 2.2rem;
+  color: white;
+  transition: transform var(--transition-speed);
+}
+
 /* === Slogan sous header === */
 .slogan {
   text-align: center;
@@ -447,4 +453,10 @@ body.dark-mode .grid-container .service-card:focus {
   gap: 10px;
 }
 
+/* inscription */
+ .inscit  input{
+  padding: 10px;
+  border-radius: 10px;
+  border-color: var(--clr-primary-light);
+}
 

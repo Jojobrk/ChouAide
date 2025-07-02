@@ -45,6 +45,18 @@ app.get("/admin", (req, res) => {
   }
   res.render("admin");
 });
+app.get("/register", (req, res) => {
+  if (req.session.userId) {
+    return res.redirect("/"); // Redirige vers la page d'accueil si l'utilisateur est déjà connecté
+  }
+  res.render("register");
+});
+app.get("/login", (req, res) => {
+  if (req.session.userId) {
+    return res.redirect("/"); // Redirige vers la page d'accueil si l'utilisateur est déjà connecté
+  }
+  res.render("login");
+});
 
 app.get("/merci", (req, res) => {
   res.render("merci");
