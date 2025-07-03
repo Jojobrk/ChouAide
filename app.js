@@ -22,8 +22,13 @@ app.use(session({
   saveUninitialized: true
 }));
 
-app.use((req, res, next) => {
-  res.locals.user = req.session.userId ? { id: req.session.userId } : null; // Ajoute l'utilisateur à res.locals pour l'accès dans les vues
+app.use(async (req, res, next) => {
+  if (req.session.userId) {
+    const user = await User.findById(req.session.userId).select('username');
+    res.locals.user = user;
+  } else {
+    res.locals.user = null;
+  }
   next();
 });
 app.get("/", (req, res) => {
@@ -46,6 +51,7 @@ app.get("/admin", (req, res) => {
   if (!req.session.userId) {
     return res.redirect("/login");
   }
+  // Optionnel : vérifier si l'utilisateur est admin ici
   res.render("admin");
 });
 app.get("/register", (req, res) => {
@@ -103,15 +109,35 @@ app.post("/register", async (req, res) => {
 // Pour la connexion
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  // Ajoute ici la logique de vérification de l'utilisateur et du mot de passe
-  // Exemple simple :
   if (!email || !password) {
     return res.render("login", { errors: [{ msg: "Tous les champs sont requis" }] });
   }
-  // TODO: Vérifier l'utilisateur et le mot de passe
-  // Si tout va bien :
-  // req.session.userId = utilisateur._id;
-  res.redirect("/");
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.render("login", { errors: [{ msg: "Utilisateur non trouvé" }] });
+    }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.render("login", { errors: [{ msg: "Mot de passe incorrect" }] });
+    }
+    req.session.userId = user._id; // <-- C'est ESSENTIEL !
+    res.redirect("/");
+  } catch (err) {
+    console.error(err);
+    res.render("login", { errors: [{ msg: "Erreur lors de la connexion" }] });
+  }
+});
+
+app.get('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      console.error(err);
+      return res.redirect('/');
+    }
+    res.clearCookie('connect.sid');
+    res.redirect('/login');
+  });
 });
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/chouaide', {

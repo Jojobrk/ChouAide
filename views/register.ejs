@@ -11,7 +11,7 @@ Créer un formulaire d’inscription qui envoie les champs username, email et pa
 </head>
 <body>
   <header>
-    <div class="header">
+    <!-- <div class="header">
       <div class="logo-container">
         <img src="assets/0a33a996-d6f7-4e8d-99cd-61a08de9dc94.jpg" alt="Logo ChouAide" class="logo">
         <span class="site-title">ChouAide</span>
@@ -30,7 +30,7 @@ Créer un formulaire d’inscription qui envoie les champs username, email et pa
       <div class="icone">
         <i class="fa-solid fa-circle-user"><a href="/login"></a></i>
       </div>
-    </div>
+    </div> -->
     <p class="slogan">Inscris-toi pour proposer ou trouver des services étudiants !</p>
   </header>
     <main style="max-width: 600px; margin: 0 auto; padding: 2rem;">
@@ -53,5 +53,17 @@ Créer un formulaire d’inscription qui envoie les champs username, email et pa
         <p>© 2025 ChouAide. Tous droits réservés.</p>
     </footer>
     <script src="script.js"></script>
+    <div class="icone" id="userIcon" style="position:relative;cursor:pointer;">
+  <i class="fa-solid fa-circle-user"></i>
+  <div id="userPopup" class="user-popup">
+    <% if (user) { %>
+      Connecté en tant que <b><%= user.username %></b><br>
+      <a href="/admin" class="admin-link">Admin</a><br>
+      <a href="/logout" class="logout-link">Déconnexion</a>
+    <% } else { %>
+      <a href="/login">Connexion</a>
+    <% } %>
+  </div>
+</div>
 </body>
 </html>

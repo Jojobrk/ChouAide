@@ -27,12 +27,17 @@
             </ul>
           </nav>
       </div>
-      <div class="icone">
-          <i class="fa-solid fa-circle-user"></i>
+      <div class="icone" id="userIcon" style="position:relative;cursor:pointer;">
+        <i class="fa-solid fa-circle-user"></i>
+        <div id="userPopup" class="user-popup">
+          <% if (user) { %>
+            Connecté en tant que <b><%= user.username %></b><br>
+            <a href="/logout" class="logout-link">Déconnexion</a>
+          <% } else { %>
+            <a href="/login">Connexion</a>
+          <% } %>
+        </div>
       </div>
-      <!-- <div class="icone">
-          <i class="fa-solid fa-circle-user"></i>
-      </div> -->
 
           <!-- <button class="dark-mode-toggle" aria-label="Basculer mode sombre" title="Mode sombre">🌙</button> -->
         
@@ -78,5 +83,19 @@
   </footer>
 
   <script src="script.js"></script>
+  <script>
+document.addEventListener("DOMContentLoaded", function() {
+  const icon = document.getElementById("userIcon");
+  if(icon) {
+    icon.addEventListener("click", function(e) {
+      icon.classList.toggle("active");
+      e.stopPropagation();
+    });
+    document.addEventListener("click", function() {
+      icon.classList.remove("active");
+    });
+  }
+});
+</script>
 </body>
 </html>

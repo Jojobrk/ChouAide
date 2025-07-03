@@ -466,3 +466,33 @@ body.dark-mode .grid-container .service-card:focus {
   border-color: var(--clr-primary-light);
 }
 
+.user-popup {
+  display: none;
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: #fff;
+  color: #222;
+  padding: 12px 22px;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  z-index: 100;
+  min-width: 200px;
+  font-size: 1rem;
+  text-align: left;
+}
+.icone.active .user-popup {
+  display: block;
+}
+.user-popup a {
+  display: block;
+  margin-top: 8px;
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.user-popup a:hover {
+  color: #e94e77;
+}
+
