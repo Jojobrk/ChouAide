@@ -8,31 +8,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header>
-    <div class="header">
-      <div class="logo-container">
-        <img src="assets/0a33a996-d6f7-4e8d-99cd-61a08de9dc94.jpg" alt="Logo ChouAide" class="logo" />
-        <span class="site-title">ChouAide</span>
-      </div>
-
-      <div class="nav-center-page">
-          <nav>
-            <ul class="nav-links" id="nav-Links">
-              <li><a href="/">Accueil</a></li>
-              <li><a href="/trouver">Trouver des services</a></li>
-              <li><a href="/proposer">Proposer des services</a></li>
-              <li><a href="/profils">Profils</a></li>
-              <li><a href="/about">À propos</a></li>
-            </ul>
-          </nav>
-      </div>
-      <div class="icone">
-          <i class="fa-solid fa-circle-user"></i>
-      </div>
-
-      <button class="dark-mode-toggle" aria-label="Basculer mode sombre" title="Mode sombre">🌙</button>
-    </div>
-  </header>
+  <%- include('partials/header') %>
 
   <p class="slogan">Découvre les profils d'étudiants qui proposent leurs services !</p>
 
@@ -50,12 +26,19 @@
 
     <section id="profilContainer" class="grid-container" aria-live="polite" aria-relevant="additions removals">
       <!-- Profils injectés ici -->
+      <% propositions.forEach(function(prop) { %>
+        <div class="service-card">
+          <h3><%= prop.titre %></h3>
+          <p><b>Catégorie :</b> <%= prop.categorie %></p>
+          <p><b>Description :</b> <%= prop.description %></p>
+          <p><b>Contact :</b> <%= prop.contact %></p>
+          <p><b>Proposé par :</b> <%= prop.nom %> (<%= prop.email %>)</p>
+        </div>
+      <% }) %>
     </section>
   </main>
 
-  <footer>
-    <p>© 2025 ChouAide. Tous droits réservés.</p>
-  </footer>
+  <%- include('partials/footer') %>
 
   <!-- Modale contact, cachée par défaut -->
   <div id="contactModal" tabindex="-1" aria-modal="true" role="dialog" aria-labelledby="modalTitle" class="hidden">
@@ -100,7 +83,7 @@
 
   <script>
     // Profils étudiants (exemple)
-    const profils = {
+    /*const profils = {
       cours: [
         { nom: "Halvin L.", competence: "Mathématiques, Physique", dispo: "Mercredi après-midi", niveau: "L2", email: "halvinlukawu011@gmail.com", tel: "+243854526336" },
         { nom: "Imelda M.", competence: "Anglais, EOE", dispo: "Week-end", niveau: "L1", email: "imeldamasidakakudji@gmail.com", tel: "+243902478879" }
@@ -117,7 +100,7 @@
         { nom: "Elie Z.", competence: "Anglais → Français, Relecture académique", dispo: "Tous les Mercredi", niveau: "L3", email: "elie.z@email.com", tel: "+33455667788" },
         { nom: "Nadine P.", competence: "CV & lettres de motivation", dispo: "Mardi et jeudi", niveau: "L2", email: "nadine.p@email.com", tel: "+33488776655" }
       ]
-    };
+    }; */
 
     const titresCategories = {
       cours: "📘 Cours particuliers",

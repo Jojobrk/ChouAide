@@ -1,65 +1,69 @@
+<!-- Dans le fichier admin.ejs, tu peux :
+1. Afficher la liste des utilisateurs
+Pour cela, dans ta route /admin de app.js, tu dois passer la liste des utilisateurs à la vue :
+2. Dans admin.ejs, affiche la liste des utilisateurs dans un tableau.
+3. (Optionnel) Ajouter des actions
+Tu peux ajouter des boutons pour supprimer un utilisateur, voir son profil, etc.
+Résumé :
+
+Passe la liste des utilisateurs à la vue depuis la route /admin.
+Affiche-les dans un tableau dans admin.ejs.
+Ajoute des actions si besoin (suppression, modification, etc.).
+avec un design et des informations QUI respecte les normes -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin ChouAide</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <title>Administration - ChouAide</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <h1>👩‍💼 Candidatures en attente</h1>
-  <div id="adminZone"></div>
-
+  <%- include('partials/header') %>
+  <main>
+    <h1>🔧 Administration</h1>
+    <section class="admin-section">
+      <h2>Liste des utilisateurs</h2>
+      <table class="user-table">
+        <thead>
+          <tr>
+            <th>Nom d'utilisateur</th>
+            <th>Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% users.forEach(function(user) { %>
+            <tr>
+              <td><%= user.username %></td>
+              <td><%= user.email %></td>
+              <td>
+                <% if (!user.isAdmin) { %>
+                  <a href="/admin/promote/<%= user._id %>">Rendre admin</a>
+                <% } else { %>
+                  <a href="/admin/demote/<%= user._id %>">Retirer admin</a>
+                <% } %>
+                <a href="/admin/delete/<%= user._id %>" onclick="return confirm('Supprimer cet utilisateur ?')">Supprimer</a>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </section>
+  </main>
+  <%- include('partials/footer') %>
   <script>
-    // 🔐 Protection simple
-    if (localStorage.getItem("admin") !== "true") {
-      alert("Accès réservé aux administrateurs.");
-      window.location.href = "index.html";
-    }
-
-    // 🔍 Charger candidatures en attente
-    const adminZone = document.getElementById("adminZone");
-    const enAttente = JSON.parse(localStorage.getItem("profilsEnAttente")) || [];
-
-    if (enAttente.length === 0) {
-      adminZone.innerHTML = "<p>Aucune candidature en attente.</p>";
-    } else {
-      enAttente.forEach((profil, i) => {
-        const div = document.createElement("div");
-        div.innerHTML = `
-          <h3>${profil.nom}</h3>
-          <p><strong>Catégorie :</strong> ${profil.categorie}</p>
-          <p><strong>Compétences :</strong> ${profil.competence}</p>
-          <p><strong>Email :</strong> ${profil.email}</p>
-          <button onclick="valider(${i})">✅ Accepter</button>
-          <button onclick="refuser(${i})">❌ Refuser</button>
-          <hr/>
-        `;
-        adminZone.appendChild(div);
+    // Optionnel : ajouter des scripts pour les actions admin
+    document.querySelectorAll('.action-link').forEach(link => {
+      link.addEventListener('click', function(event) {
+        if (!confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
+          event.preventDefault();
+        }
       });
-    }
-
-    function valider(index) {
-      const enAttente = JSON.parse(localStorage.getItem("profilsEnAttente")) || [];
-      const valides = JSON.parse(localStorage.getItem("profilsAjoutes")) || [];
-
-      valides.push(enAttente[index]);
-      enAttente.splice(index, 1);
-
-      localStorage.setItem("profilsEnAttente", JSON.stringify(enAttente));
-      localStorage.setItem("profilsAjoutes", JSON.stringify(valides));
-
-      alert("Candidature acceptée !");
-      location.reload();
-    }
-
-    function refuser(index) {
-      const enAttente = JSON.parse(localStorage.getItem("profilsEnAttente")) || [];
-      enAttente.splice(index, 1);
-      localStorage.setItem("profilsEnAttente", JSON.stringify(enAttente));
-
-      alert("Candidature refusée.");
-      location.reload();
-    }
+    });
   </script>
 </body>
 </html>
+<!-- Note: Assurez-vous que les routes pour supprimer un utilisateur existent dans votre application Express. -->
+<!-- Par exemple, vous pouvez ajouter une route DELETE dans votre app.js pour gérer la suppression d

@@ -15,71 +15,48 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header>
-   <div class="header"> 
-     <div class="logo-container">
-      <img src="assets/0a33a996-d6f7-4e8d-99cd-61a08de9dc94.jpg" alt="Logo ChouAide" class="logo">
-      <span class="site-title">ChouAide</span>
-    </div>
-      <div class="nav-center-page">
-          <nav>
-            <ul class="nav-links" id="nav-Links">
-              <li><a href="/">Accueil</a></li>
-              <li><a href="/trouver">Trouver des services</a></li>
-              <li><a href="/proposer">Proposer des services</a></li>
-              <li><a href="/profils">Profils</a></li>
-              <li><a href="/about">À propos</a></li>
-            </ul>
-          </nav>
-      </div>
-      <div class="icone">
-          <i class="fa-solid fa-circle-user"></i>
-      </div>
-   </div>
-    <p class="slogan">Remplis ce formulaire pour proposer ton aide à d'autres étudiants.</p>
-  </header>
+  <%- include('partials/header') %>
 
-  <h1>📢 Proposer une prestation</h1>
+  <h1>🤝 Proposer une prestation</h1>
+  <p style="text-align: center;">Remplis ce formulaire pour proposer tes services à la communauté étudiante.</p>
 
   <main style="max-width: 600px; margin: 0 auto; padding: 2rem;">
-    <form id="propositionForm">
-      <label>Nom :
-        <input type="text" name="nom" required />
+    <form action="/proposer" method="POST" class="proposer-form">
+      <label>Nom : <input type="text" name="nom" required /></label><br/><br/>
+      <label>Compétences : <input type="text" name="competence" required /></label><br/><br/>
+      <label>Disponibilité : <input type="text" name="dispo" required /></label><br/><br/>
+      <label>Niveau : <input type="text" name="niveau" required /></label><br/><br/>
+      <label>Email : <input type="email" name="email" required /></label><br/><br/>
+      <label>Titre du service : <input type="text" name="titre" required></label><br/><br/>
+      <label>Contact (email ou téléphone) : <input type="text" name="contact" required></label><br/><br/>
+      <label>Description :
+        <textarea name="description" rows="4" required class="desc-textarea"></textarea>
       </label><br/><br/>
-
-      <label>Compétences :
-        <input type="text" name="competence" required />
-      </label><br/><br/>
-
-      <label>Disponibilité :
-        <input type="text" name="dispo" required />
-      </label><br/><br/>
-
-      <label>Niveau :
-        <input type="text" name="niveau" required />
-      </label><br/><br/>
-
-      <label>Email :
-        <input type="email" name="email" required />
-      </label><br/><br/>
-
       <label>Catégorie :
         <select name="categorie" required>
-          <option value="">-- Choisis une catégorie --</option>
+          <option value="">Choisir une catégorie</option>
           <option value="cours">Cours particuliers</option>
           <option value="depannage">Dépannage informatique</option>
           <option value="design">Design graphique</option>
           <option value="traduction">Traduction & relecture</option>
         </select>
       </label><br/><br/>
-
-      <button type="submit" class="btn">Envoyer</button>
+      <button type="submit" class="btn">Proposer mon service</button>
     </form>
   </main>
 
-  <footer>
-    <p>© 2025 ChouAide. Tous droits réservés.</p>
-  </footer>
+  <%- include('partials/footer') %>
+
+  <% if (typeof success !== "undefined") { %>
+  <div class="success"><%= success %></div>
+  <% } %>
+  <% if (typeof errors !== "undefined" && errors.length > 0) { %>
+  <ul class="error">
+    <% errors.forEach(function(error) { %>
+      <li><%= error.msg %></li>
+    <% }); %>
+  </ul>
+  <% } %>
 
 <script>
   document.getElementById("propositionForm").addEventListener("submit", function(e) {

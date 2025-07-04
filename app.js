@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const path = require("path");
 const mongoose = require('mongoose');
 const User = require('./models/User');
+const Proposition = require('./models/Proposition');
 const bcrypt = require('bcrypt');
 
 dotenv.config();
@@ -24,7 +25,7 @@ app.use(session({
 
 app.use(async (req, res, next) => {
   if (req.session.userId) {
-    const user = await User.findById(req.session.userId).select('username');
+    const user = await User.findById(req.session.userId).select('username isAdmin');
     res.locals.user = user;
   } else {
     res.locals.user = null;
@@ -33,6 +34,14 @@ app.use(async (req, res, next) => {
 });
 app.get("/", (req, res) => {
   res.render("index");
+});
+
+app.get('/politique-confidentialite', (req, res) => {
+  res.render('politique-confidentialite');
+});
+
+app.get('/mentions-legales', (req, res) => {
+  res.render('mentions-legales');
 });
 
 app.get("/about", (req, res) => {
@@ -44,15 +53,17 @@ app.get("/contact", (req, res) => {
 app.get("/proposer", (req, res) => {
   res.render("proposer");
 });
-app.get("/profils", (req, res) => {
-  res.render("profils");
-});
-app.get("/admin", (req, res) => {
-  if (!req.session.userId) {
-    return res.redirect("/login");
+app.get('/profils', async (req, res) => {
+  let filter = {};
+  if (req.query.categorie) {
+    filter.categorie = req.query.categorie;
   }
-  // Optionnel : vérifier si l'utilisateur est admin ici
-  res.render("admin");
+  const propositions = await Proposition.find(filter).sort({ date: -1 });
+  res.render('profils', { propositions, selectedCategorie: req.query.categorie || null });
+});
+app.get("/admin", requireAdmin, async (req, res) => {
+  const users = await User.find().select('username email isAdmin');
+  res.render("admin", { users });
 });
 app.get("/register", (req, res) => {
   if (req.session.userId) {
@@ -70,8 +81,9 @@ app.get("/login", (req, res) => {
 app.get("/merci", (req, res) => {
   res.render("merci");
 });
-app.get("/trouver", (req, res) => {
-  res.render("trouver");
+app.get("/trouver", async (req, res) => {
+  const propositions = await Proposition.find().sort({ date: -1 });
+  res.render('trouver', { propositions });
 });
 app.get("/profil/:id", (req, res) => {
   const userId = req.params.id;
@@ -80,6 +92,8 @@ app.get("/profil/:id", (req, res) => {
   }
   res.render("profil", { userId });
 });
+
+
 
 // Pour l'inscription
 app.post("/register", async (req, res) => {
@@ -140,6 +154,62 @@ app.get('/logout', (req, res) => {
   });
 });
 
+// Middleware admin (doit être défini AVANT les routes admin)
+function requireAdmin(req, res, next) {
+  if (!req.session.userId) return res.redirect('/login');
+  User.findById(req.session.userId).then(user => {
+    if (user && user.isAdmin) {
+      next();
+    } else {
+      res.status(403).send("Accès réservé aux administrateurs.");
+    }
+  }).catch(() => res.redirect('/login'));
+}
+
+// Protège la page admin
+app.get("/admin", requireAdmin, async (req, res) => {
+  const users = await User.find().select('username email isAdmin');
+  res.render("admin", { users });
+});
+
+// Route pour rendre admin
+app.get('/admin/promote/:id', requireAdmin, async (req, res) => {
+  await User.findByIdAndUpdate(req.params.id, { isAdmin: true });
+  res.redirect('/admin');
+});
+
+// Route pour retirer admin
+app.get('/admin/demote/:id', requireAdmin, async (req, res) => {
+  await User.findByIdAndUpdate(req.params.id, { isAdmin: false });
+  res.redirect('/admin');
+});
+
+app.get('/admin/delete/:id', requireAdmin, async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.redirect('/admin');
+  } catch (err) {
+    console.error(err);
+    res.redirect('/admin');
+  }
+});
+
+app.post('/proposer', async (req, res) => {
+  try {
+    const { nom, competence, dispo, niveau, email, titre, contact, description, categorie } = req.body;
+    await Proposition.create({ nom, competence, dispo, niveau, email, titre, contact, description, categorie });
+    res.render('proposer', { success: "Service proposé avec succès !" });
+  } catch (err) {
+    console.error(err);
+    res.render('proposer', { errors: [{ msg: "Erreur lors de l'envoi" }] });
+  }
+});
+
+app.get("/profils/categorie/:categorie", async (req, res) => {
+  const propositions = await Proposition.find({ categorie: req.params.categorie }).sort({ date: -1 });
+  res.render("profils", { propositions, selectedCategorie: req.params.categorie });
+});
+
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/chouaide', {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -147,6 +217,17 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/chouaide'
   console.log('✅ Connecté à MongoDB');
 }).catch(err => {
   console.error('Erreur MongoDB :', err);
+});
+
+// Gestion globale des erreurs (500, etc.)
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).render('error', { message: err.message });
+});
+
+// Gestion des erreurs 404 (à la toute fin)
+app.use((req, res) => {
+  res.status(404).render('error', { message: "Page introuvable" });
 });
 
 app.listen(PORT, () => {

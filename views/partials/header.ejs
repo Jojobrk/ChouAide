@@ -1,0 +1,52 @@
+<div class="header">
+  <div class="logo-container">
+    <img src="assets/0a33a996-d6f7-4e8d-99cd-61a08de9dc94.jpg" alt="Logo ChouAide" class="logo">
+    <span class="site-title">ChouAide</span>
+  </div>
+  <div class="nav-center-page">
+    <nav>
+      <ul class="nav-links" id="nav-Links">
+        <li><a href="/">Accueil</a></li>
+        <li><a href="/trouver">Trouver des services</a></li>
+        <li><a href="/proposer">Proposer des services</a></li>
+        <li><a href="/profils">Profils</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="icone" id="userIcon" style="position:relative;cursor:pointer;">
+    <i class="fa-solid fa-circle-user"></i>
+    <div id="userPopup" class="user-popup">
+      <% if (user) { %>
+        <div class="user-avatar">
+          <span><%= user.username.charAt(0).toUpperCase() %></span>
+        </div>
+        <div class="user-name"><%= user.username %></div>
+        <% if (user.isAdmin) { %>
+          <a href="/admin" class="admin-link">Administration</a>
+        <% } %>
+        <a href="/logout" class="logout-link">Déconnexion</a>
+      <% } else { %>
+        <a href="/login">Connexion</a>
+      <% } %>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const icon = document.getElementById("userIcon");
+  const popup = document.getElementById("userPopup");
+  if(icon && popup) {
+    icon.addEventListener("click", function(e) {
+      icon.classList.toggle("active");
+      e.stopPropagation();
+    });
+    document.addEventListener("click", function() {
+      icon.classList.remove("active");
+    });
+    // Empêche la fermeture si on clique dans le popup
+    popup.addEventListener("click", function(e) {
+      e.stopPropagation();
+    });
+  }
+});
+</script>

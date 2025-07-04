@@ -9,43 +9,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header>
-    <div class="header">
-      <div class="logo-container">
-        <img src="assets/0a33a996-d6f7-4e8d-99cd-61a08de9dc94.jpg" alt="Logo ChouAide" class="logo" />
-
-        <span class="site-title">ChouAide</span>
-      </div>
-      <div class="nav-center-page">
-          <nav>
-            <ul class="nav-links" id="nav-Links">
-              <li><a href="/">Accueil</a></li>
-              <li><a href="/trouver">Trouver des services</a></li>
-              <li><a href="/proposer">Proposer des services</a></li>
-              <li><a href="/profils">Profils</a></li>
-              <li><a href="/about">À propos</a></li>
-            </ul>
-          </nav>
-      </div>
-      <div class="icone" id="userIcon" style="position:relative;cursor:pointer;">
-        <i class="fa-solid fa-circle-user"></i>
-        <div id="userPopup" class="user-popup">
-          <% if (user) { %>
-            Connecté en tant que <b><%= user.username %></b><br>
-            <a href="/logout" class="logout-link">Déconnexion</a>
-          <% } else { %>
-            <a href="/login">Connexion</a>
-          <% } %>
-        </div>
-      </div>
-
-          <!-- <button class="dark-mode-toggle" aria-label="Basculer mode sombre" title="Mode sombre">🌙</button> -->
-        
-
-    </div>
-
-    <p class="slogan">La plateforme où les étudiants trouvent et proposent des services !</p>
-  </header>
+  <%- include('partials/header') %>
   <div class="contain">
      <section class="carousel" class="element">
     <div class="slide active">
@@ -70,32 +34,16 @@
   </div>
   <main class="grid-container">
     <section class="cta">
-      <button class="btn" onclick="window.location.href='trouver.html'">Trouver une prestation</button>
-      <button class="btn" onclick="window.location.href='proposer.html'">Proposer une prestation</button>
+      <button class="btn" onclick="window.location.href='/trouver'">Trouver une prestation</button>
+      <button class="btn" onclick="window.location.href='/proposer'">Proposer une prestation</button>
     </section>
 
     
   </main>
 
   
-  <footer>
-    <p>© 2025 ChouAide. Tous droits réservés.</p>
-  </footer>
+  <%- include('partials/footer') %>
 
   <script src="script.js"></script>
-  <script>
-document.addEventListener("DOMContentLoaded", function() {
-  const icon = document.getElementById("userIcon");
-  if(icon) {
-    icon.addEventListener("click", function(e) {
-      icon.classList.toggle("active");
-      e.stopPropagation();
-    });
-    document.addEventListener("click", function() {
-      icon.classList.remove("active");
-    });
-  }
-});
-</script>
 </body>
 </html>
